@@ -6,6 +6,7 @@ import {
   doc,
   updateDoc,
   serverTimestamp,
+  getDoc,
 } from "firebase/firestore";
 
 const firebaseConfig = {
@@ -52,10 +53,17 @@ const saveImageToDatabase = async (imageData, galleryId) => {
   return { ...imageData, createdAt };
 };
 
+const getGallery = async (galleryId) => {
+  const docRef = doc(database, "gallery", galleryId);
+  const docSnap = await getDoc(docRef);
+  if (docSnap.exists()) return docSnap.data();
+};
+
 export {
   database,
   storage,
   getImageId,
   saveImageToStorage,
   saveImageToDatabase,
+  getGallery,
 };

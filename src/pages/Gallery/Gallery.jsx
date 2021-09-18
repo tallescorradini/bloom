@@ -1,4 +1,5 @@
-import React, { useRef } from "react";
+import React, { useState, useEffect, useRef } from "react";
+
 import { useParams } from "react-router-dom";
 
 import AppBar from "@mui/material/AppBar";
@@ -23,16 +24,24 @@ const StyledFab = styled(Fab)({
   right: 0,
   margin: "0 auto",
 });
-// TODO (must): [x] feat add new photo
-// TODO (must): [ ] feat update list when photo is added
-// TODO (must): [ ] feat list gallery images
-// TODO (must): [ ] feat view photo
-// TODO (must): [ ] feat delete photo
-// TODO (must): [ ] feat rename gallery name
+// TODO: [x] feat add new photo
+// TODO: [x] feat update list when photo is added
+// TODO: [x] feat list gallery images
+// TODO: [ ] feat view photo
+// TODO: [ ] feat delete photo
+// TODO: [ ] feat rename gallery name
 
-const Gallery = ({ images, onGalleryUpdate }) => {
+const Gallery = () => {
   const imageInputRef = useRef();
   const { galleryId } = useParams();
+  const [images, setImages] = useState([]);
+
+  const updateGallery = (savedImageData) => {
+    setImages((prev) => [
+      ...prev,
+      { src: savedImageData.path, title: savedImageData.id },
+    ]);
+  };
 
   const handleImageChange = async (event) => {
     const loadedImage = event.target.files[0];
@@ -42,14 +51,22 @@ const Gallery = ({ images, onGalleryUpdate }) => {
       galleryId
     );
 
-    onGalleryUpdate(savedImageData);
+    updateGallery(savedImageData);
   };
+
+  useEffect(() => {
+    services.gallery.getGallery(galleryId).then((images) => {
+      setImages(
+        Object.keys(images).map((id) => ({ src: images[id].path, title: id }))
+      );
+    });
+  }, []);
 
   return (
     <>
       <AppBar position="static">
         <Toolbar>
-          <Typography variant="h6">{`Coleção ${galleryId}`}</Typography>
+          <Typography variant="h5">{`Meu álbum`}</Typography>
         </Toolbar>
       </AppBar>
       <input
@@ -61,7 +78,7 @@ const Gallery = ({ images, onGalleryUpdate }) => {
       />
 
       <Box>
-        <ImageList variant="masonry" cols={3} gap={8}>
+        <ImageList cols={3} gap={8}>
           {images.map((item) => (
             <ImageListItem key={item.src}>
               <img

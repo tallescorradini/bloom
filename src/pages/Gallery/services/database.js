@@ -2,6 +2,7 @@ import {
   getImageId,
   saveImageToStorage,
   saveImageToDatabase,
+  getGallery,
 } from "../../../services/firebase";
 
 const saveImage = async (loadedImage, galleryId) => {
@@ -24,6 +25,7 @@ const saveImage = async (loadedImage, galleryId) => {
 
 const gallery = {
   saveImage,
+  getGallery,
 };
 
 export default gallery;
