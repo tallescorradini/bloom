@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useRef } from "react";
+import { useParams } from "react-router-dom";
 
 import AppBar from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
@@ -12,56 +13,7 @@ import AddIcon from "@mui/icons-material/Add";
 import { styled } from "@mui/material/styles";
 import Fab from "@mui/material/Fab";
 
-const itemData = [
-  {
-    img: "https://images.unsplash.com/photo-1549388604-817d15aa0110",
-    title: "Bed",
-  },
-  {
-    img: "https://images.unsplash.com/photo-1525097487452-6278ff080c31",
-    title: "Books",
-  },
-  {
-    img: "https://images.unsplash.com/photo-1523413651479-597eb2da0ad6",
-    title: "Sink",
-  },
-  {
-    img: "https://images.unsplash.com/photo-1563298723-dcfebaa392e3",
-    title: "Kitchen",
-  },
-  {
-    img: "https://images.unsplash.com/photo-1588436706487-9d55d73a39e3",
-    title: "Blinds",
-  },
-  {
-    img: "https://images.unsplash.com/photo-1574180045827-681f8a1a9622",
-    title: "Chairs",
-  },
-  {
-    img: "https://images.unsplash.com/photo-1530731141654-5993c3016c77",
-    title: "Laptop",
-  },
-  {
-    img: "https://images.unsplash.com/photo-1481277542470-605612bd2d61",
-    title: "Doors",
-  },
-  {
-    img: "https://images.unsplash.com/photo-1517487881594-2787fef5ebf7",
-    title: "Coffee",
-  },
-  {
-    img: "https://images.unsplash.com/photo-1516455207990-7a41ce80f7ee",
-    title: "Storage",
-  },
-  {
-    img: "https://images.unsplash.com/photo-1597262975002-c5c3b14bbd62",
-    title: "Candle",
-  },
-  {
-    img: "https://images.unsplash.com/photo-1519710164239-da123dc03ef4",
-    title: "Coffee table",
-  },
-];
+import services from "./services";
 
 const StyledFab = styled(Fab)({
   position: "absolute",
@@ -71,22 +23,50 @@ const StyledFab = styled(Fab)({
   right: 0,
   margin: "0 auto",
 });
+// TODO (must): [x] feat add new photo
+// TODO (must): [ ] feat update list when photo is added
+// TODO (must): [ ] feat list gallery images
+// TODO (must): [ ] feat view photo
+// TODO (must): [ ] feat delete photo
+// TODO (must): [ ] feat rename gallery name
 
-const Gallery = () => {
+const Gallery = ({ images, onGalleryUpdate }) => {
+  const imageInputRef = useRef();
+  const { galleryId } = useParams();
+
+  const handleImageChange = async (event) => {
+    const loadedImage = event.target.files[0];
+    if (!loadedImage) return;
+    const savedImageData = await services.gallery.saveImage(
+      loadedImage,
+      galleryId
+    );
+
+    onGalleryUpdate(savedImageData);
+  };
+
   return (
     <>
       <AppBar position="static">
         <Toolbar>
-          <Typography variant="h6">Coleção</Typography>
+          <Typography variant="h6">{`Coleção ${galleryId}`}</Typography>
         </Toolbar>
       </AppBar>
+      <input
+        type="file"
+        style={{ display: "none" }}
+        onChange={handleImageChange}
+        ref={imageInputRef}
+        accept="image/x-png,image/jpeg"
+      />
+
       <Box>
         <ImageList variant="masonry" cols={3} gap={8}>
-          {itemData.map((item) => (
-            <ImageListItem key={item.img}>
+          {images.map((item) => (
+            <ImageListItem key={item.src}>
               <img
-                src={`${item.img}?w=248&fit=crop&auto=format`}
-                srcSet={`${item.img}?w=248&fit=crop&auto=format&dpr=2 2x`}
+                src={`${item.src}?w=248&fit=crop&auto=format`}
+                srcSet={`${item.src}?w=248&fit=crop&auto=format&dpr=2 2x`}
                 alt={item.title}
                 loading="lazy"
               />
@@ -98,7 +78,11 @@ const Gallery = () => {
       <AppBar position="fixed" color="primary" sx={{ top: "auto", bottom: 0 }}>
         <Toolbar>
           <StyledFab color="secondary" aria-label="add">
-            <AddIcon />
+            <AddIcon
+              onClick={() => {
+                imageInputRef.current.click();
+              }}
+            />
           </StyledFab>
           <Box sx={{ flexGrow: 1 }} />
         </Toolbar>
