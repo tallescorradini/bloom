@@ -27,6 +27,8 @@ const StyledFab = styled(Fab)({
 // TODO: [x] feat add new photo
 // TODO: [x] feat update list when photo is added
 // TODO: [x] feat list gallery images
+// TODO: [x] fix create an empty list state
+// TODO: [ ] feat use image compressing for faster loading
 // TODO: [ ] feat view photo
 // TODO: [ ] feat delete photo
 // TODO: [ ] feat rename gallery name
@@ -54,6 +56,10 @@ const Gallery = () => {
     updateGallery(savedImageData);
   };
 
+  const isEmptyList = () => {
+    return images.length > 0;
+  };
+
   useEffect(() => {
     services.gallery.getGallery(galleryId).then((images) => {
       setImages(
@@ -77,20 +83,24 @@ const Gallery = () => {
         accept="image/x-png,image/jpeg"
       />
 
-      <Box>
-        <ImageList cols={3} gap={8}>
-          {images.map((item) => (
-            <ImageListItem key={item.src}>
-              <img
-                src={`${item.src}?w=248&fit=crop&auto=format`}
-                srcSet={`${item.src}?w=248&fit=crop&auto=format&dpr=2 2x`}
-                alt={item.title}
-                loading="lazy"
-              />
-            </ImageListItem>
-          ))}
-        </ImageList>
-      </Box>
+      {isEmptyList ? (
+        <Typography variant="body1">{`Nenhuma imagem na galeria`}</Typography>
+      ) : (
+        <Box>
+          <ImageList cols={3} gap={8}>
+            {images.map((item) => (
+              <ImageListItem key={item.src}>
+                <img
+                  src={`${item.src}?w=248&fit=crop&auto=format`}
+                  srcSet={`${item.src}?w=248&fit=crop&auto=format&dpr=2 2x`}
+                  alt={item.title}
+                  loading="lazy"
+                />
+              </ImageListItem>
+            ))}
+          </ImageList>
+        </Box>
+      )}
 
       <AppBar position="fixed" color="primary" sx={{ top: "auto", bottom: 0 }}>
         <Toolbar>
