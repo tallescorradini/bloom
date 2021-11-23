@@ -14,7 +14,7 @@ import AddIcon from "@mui/icons-material/Add";
 import { styled } from "@mui/material/styles";
 import Fab from "@mui/material/Fab";
 
-import services from "./services";
+import { database, storage } from "../../services";
 
 const StyledFab = styled(Fab)({
   position: "absolute",
@@ -38,22 +38,23 @@ const Gallery = () => {
   const { galleryId } = useParams();
   const [images, setImages] = useState([]);
 
-  const updateGallery = (savedImageData) => {
-    setImages((prev) => [
-      ...prev,
-      { src: savedImageData.path, title: savedImageData.id },
-    ]);
-  };
-
   const handleImageChange = async (event) => {
     const loadedImage = event.target.files[0];
     if (!loadedImage) return;
-    const savedImageData = await services.gallery.saveImage(
-      loadedImage,
-      galleryId
-    );
 
-    updateGallery(savedImageData);
+    const imageId = database.makeImageId();
+    const { src } = await storage.saveImage(loadedImage, imageId, galleryId);
+
+    const savedImageData = await database.saveImage({
+      id: imageId,
+      src: src,
+      galleryId: galleryId,
+    });
+
+    setImages((prev) => [
+      ...prev,
+      { src: savedImageData.src, title: savedImageData.id },
+    ]);
   };
 
   const isEmptyList = () => {
@@ -61,12 +62,12 @@ const Gallery = () => {
   };
 
   useEffect(() => {
-    services.gallery.getGallery(galleryId).then((images) => {
+    database.getGallery(galleryId).then((images) => {
       setImages(
-        Object.keys(images).map((id) => ({ src: images[id].path, title: id }))
+        Object.keys(images).map((id) => ({ src: images[id].src, title: id }))
       );
     });
-  }, []);
+  }, [galleryId]);
 
   return (
     <>
@@ -83,7 +84,7 @@ const Gallery = () => {
         accept="image/x-png,image/jpeg"
       />
 
-      {isEmptyList ? (
+      {!isEmptyList ? (
         <Typography variant="body1">{`Nenhuma imagem na galeria`}</Typography>
       ) : (
         <Box>
