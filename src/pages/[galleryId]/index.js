@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
-
-import { useParams } from "react-router-dom";
+import { useRouter } from "next/router";
+import Head from "next/head";
 
 import AppBar from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
@@ -33,10 +33,11 @@ const StyledFab = styled(Fab)({
 // TODO: [ ] feat delete photo
 // TODO: [ ] feat rename gallery name
 
-const Gallery = () => {
+export default function Gallery() {
   const imageInputRef = useRef();
-  const { galleryId } = useParams();
+  const router = useRouter();
   const [images, setImages] = useState([]);
+  const { galleryId } = router.query;
 
   const handleImageChange = async (event) => {
     const loadedImage = event.target.files[0];
@@ -62,6 +63,7 @@ const Gallery = () => {
   };
 
   useEffect(() => {
+    if (!galleryId) return;
     database.getGallery(galleryId).then((images) => {
       setImages(
         Object.keys(images).map((id) => ({ src: images[id].src, title: id }))
@@ -71,6 +73,14 @@ const Gallery = () => {
 
   return (
     <>
+      <Head>
+        <title>{"QR-Drive"}</title>
+        <meta
+          name="description"
+          content={"Easily access your media using QR Codes"}
+        />
+        <link rel="icon" href="/favicon.ico" />
+      </Head>
       <AppBar position="static">
         <Toolbar>
           <Typography variant="h5">{`Meu álbum`}</Typography>
@@ -117,6 +127,4 @@ const Gallery = () => {
       </AppBar>
     </>
   );
-};
-
-export default Gallery;
+}
