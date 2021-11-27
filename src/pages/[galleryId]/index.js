@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/router";
 import Head from "next/head";
+import axios from "axios";
 
 import AppBar from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
@@ -14,7 +15,8 @@ import AddIcon from "@mui/icons-material/Add";
 import { styled } from "@mui/material/styles";
 import Fab from "@mui/material/Fab";
 
-import { database, storage } from "../../services";
+import { database } from "../../services";
+import { encodeImage } from "../../utils/encodeImage";
 
 const StyledFab = styled(Fab)({
   position: "absolute",
@@ -39,23 +41,40 @@ export default function Gallery() {
   const [images, setImages] = useState([]);
   const { galleryId } = router.query;
 
-  const handleImageChange = async (event) => {
-    const loadedImage = event.target.files[0];
-    if (!loadedImage) return;
+  async function uploadImage(imageId, imageFile, galleryId) {
+    const base64EncodedImage = await encodeImage(imageFile);
 
-    const imageId = database.makeImageId();
-    const { src } = await storage.saveImage(loadedImage, imageId, galleryId);
+    const { data: storedImageData } = await axios.put(
+      `/api/${galleryId}/image`,
+      { encodedImage: base64EncodedImage, imageId: imageId },
+      { headers: { "Content-Type": "application/json" } }
+    );
 
     const savedImageData = await database.saveImage({
       id: imageId,
-      src: src,
+      src: storedImageData.src,
       galleryId: galleryId,
     });
 
-    setImages((prev) => [
-      ...prev,
-      { src: savedImageData.src, title: savedImageData.id },
-    ]);
+    return savedImageData;
+  }
+
+  const handleImageChange = async (event) => {
+    const imageFile = event.target.files[0];
+    if (!imageFile) return;
+
+    const imageId = database.makeImageId();
+
+    try {
+      const savedImageData = await uploadImage(imageId, imageFile, galleryId);
+
+      setImages((prev) => [
+        ...prev,
+        { src: savedImageData.src, title: savedImageData.id },
+      ]);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const isEmptyList = () => {
