@@ -1,0 +1,51 @@
+.header {
+  .title {
+    font-size: 1.5rem;
+    font-weight: 400;
+  }
+}
+
+.backLink {
+  --container-size: 2.5rem;
+
+  margin: 0;
+  height: var(--container-size);
+  width: var(--container-size);
+  display: flex;
+}
+
+.moreButton {
+  --container-size: 2.5rem;
+
+  margin: 0;
+  height: var(--container-size);
+  width: var(--container-size);
+  border-style: none;
+  background-color: transparent;
+  padding: 0;
+}
+
+.imageList {
+  margin: 0;
+  padding: 0 1rem;
+
+  width: 100%;
+
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  justify-items: center;
+  gap: 1.25rem;
+
+  list-style-type: none;
+
+  & > li {
+    line-height: 0;
+    width: 100%;
+
+    img {
+      object-fit: contain;
+      border-radius: 0.5rem;
+      width: 100%;
+    }
+  }
+}

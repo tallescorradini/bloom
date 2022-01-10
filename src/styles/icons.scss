@@ -1,0 +1,34 @@
+.icon {
+  --icon-size: 1rem;
+
+  margin: auto;
+  height: var(--icon-size);
+  width: var(--icon-size);
+  display: block;
+
+  &.sm {
+    --icon-size: 1rem;
+  }
+  &.md {
+    --icon-size: 1.5rem;
+  }
+  &.lg {
+    --icon-size: 2rem;
+  }
+  &.xl {
+    --icon-size: 2.5rem;
+  }
+
+  &.chevronLeft {
+    background: url("../public/icon-chevron-left.svg") no-repeat center;
+    background-size: contain;
+  }
+  &.moreVertical {
+    background: url("../public/icon-more-vertical.svg") no-repeat center;
+    background-size: contain;
+  }
+  &.cameraFilled {
+    background: url("../public/icon-camera-filled.svg") no-repeat center;
+    background-size: contain;
+  }
+}
