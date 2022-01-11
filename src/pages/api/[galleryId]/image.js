@@ -10,6 +10,12 @@ export default async function handler(req, res) {
     const image = await cloudinary.uploader.upload(encodedImage, {
       folder: galleryId,
       public_id: imageId,
+      transformation: [
+        {
+          height: 1920,
+          quality: "auto:good",
+        },
+      ],
     });
 
     res.status(200).json({
