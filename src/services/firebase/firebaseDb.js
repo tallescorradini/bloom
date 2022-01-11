@@ -21,7 +21,7 @@ export async function saveImage(imageData) {
   const createdAt = serverTimestamp();
   const imageField = {
     [id]: {
-      src: src,
+      src,
       createdAt,
       galleryId,
     },

@@ -2,6 +2,7 @@ import Head from "next/head";
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import axios from "axios";
+import { Image, Placeholder, Transformation } from "cloudinary-react";
 
 import styles from "./Gallery.module.scss";
 import { ImageInput } from "../../components/ImageInput/ImageInput";
@@ -16,7 +17,7 @@ export default function Gallery() {
   async function uploadImage(imageId, imageFile, galleryId) {
     const base64EncodedImage = await encodeImage(imageFile);
 
-    const { data: storedImageData } = await axios.put(
+    const { data: storedImageData } = await axios.post(
       `/api/${galleryId}/image`,
       { encodedImage: base64EncodedImage, imageId: imageId },
       { headers: { "Content-Type": "application/json" } }
@@ -24,7 +25,7 @@ export default function Gallery() {
 
     const savedImageData = await database.saveImage({
       id: imageId,
-      src: storedImageData.src,
+      src: storedImageData,
       galleryId: galleryId,
     });
 
@@ -42,7 +43,7 @@ export default function Gallery() {
 
       setImages((prev) => [
         ...prev,
-        { src: savedImageData.src, title: savedImageData.id },
+        { src: savedImageData.src, id: savedImageData.id },
       ]);
     } catch (error) {
       console.log(error);
@@ -57,9 +58,7 @@ export default function Gallery() {
     if (!galleryId) return;
     database.getGallery(galleryId).then((images) => {
       if (!images) return;
-      setImages(
-        Object.keys(images).map((id) => ({ src: images[id].src, title: id }))
-      );
+      setImages(Object.keys(images).map((id) => ({ src: images[id].src, id })));
     });
   }, [galleryId]);
 
@@ -86,18 +85,25 @@ export default function Gallery() {
       </header>
 
       <main>
-        {isEmptyList ? (
+        {isEmptyList() ? (
           <p>{`Nenhuma imagem na galeria`}</p>
         ) : (
           <ul className={styles.imageList}>
-            {images.map((item) => (
-              <li key={item.src}>
-                <img
-                  src={`${item.src}?w=248&fit=crop&auto=format`}
-                  srcSet={`${item.src}?w=248&fit=crop&auto=format&dpr=2 2x`}
-                  alt={item.title}
+            {images.map((image) => (
+              <li key={image.id}>
+                <Image
+                  cloudName={process.env.NEXT_PUBLIC_CLOUD_NAME}
+                  publicId={image.src.cloudinary.publicId}
+                  version={image.src.cloudinary.version}
                   loading="lazy"
-                />
+                >
+                  <Transformation
+                    gravity="auto"
+                    height="150"
+                    width="150"
+                    crop="fill"
+                  />
+                </Image>
               </li>
             ))}
           </ul>
