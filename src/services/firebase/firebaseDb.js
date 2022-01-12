@@ -1,13 +1,13 @@
 import {
   collection,
   doc,
-  updateDoc,
-  serverTimestamp,
   getDoc,
   setDoc,
   query,
   where,
   getDocs,
+  limit,
+  orderBy,
 } from "firebase/firestore";
 
 import { firebaseDatabase as db } from "./firebaseApp";
@@ -20,14 +20,15 @@ export function makeImageId() {
 
 export async function saveImage(imageData) {
   const { id, src, galleryId } = imageData;
+  const createdAt = Date.now();
 
   await setDoc(doc(db, "images", id), {
     src,
     galleryId,
-    createdAt: Date(),
+    createdAt,
   });
 
-  return { ...imageData, createdAt: Date() };
+  return { ...imageData, createdAt };
 }
 
 export async function getGallery(galleryId) {
@@ -36,9 +37,39 @@ export async function getGallery(galleryId) {
 
   const images = (
     await getDocs(
-      query(collection(db, "images"), where("galleryId", "==", galleryId))
+      query(
+        collection(db, "images"),
+        where("galleryId", "==", galleryId),
+        orderBy("createdAt", "asc")
+      )
     )
   ).docs.map((image) => ({ id: image.id, ...image.data() }));
 
   return { ...gallery.data(), images };
+}
+
+export async function getUserGalleries({ userId, maxThumbnails }) {
+  if (!userId) return [];
+  const galleries = await Promise.all(
+    (
+      await getDocs(
+        query(collection(db, "galleries"), where("userId", "==", userId))
+      )
+    ).docs.map(async (gallery) => {
+      const images = (
+        await getDocs(
+          query(
+            collection(db, "images"),
+            where("galleryId", "==", gallery.id),
+            orderBy("createdAt", "asc"),
+            limit(maxThumbnails)
+          )
+        )
+      ).docs.map((image) => ({ id: image.id, ...image.data() }));
+
+      return { id: gallery.id, ...gallery.data(), images };
+    })
+  );
+
+  return galleries;
 }
