@@ -1,8 +1,9 @@
 import Head from "next/head";
+import Link from "next/link";
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import axios from "axios";
-import { Image, Placeholder, Transformation } from "cloudinary-react";
+import { Image, Transformation } from "cloudinary-react";
 
 import styles from "./Gallery.module.scss";
 import { ImageInput } from "../../components/ImageInput/ImageInput";
@@ -79,9 +80,12 @@ export default function Gallery() {
           </Head>
 
           <header className={styles.header}>
-            <a href="/" aria-label="Voltar" className={styles.backLink}>
-              <span aria-hidden="true" className="icon sm chevronLeft"></span>
-            </a>
+            <Link href="/">
+              <a href="/" aria-label="Voltar" className={styles.backLink}>
+                <span aria-hidden="true" className="icon sm chevronLeft"></span>
+              </a>
+            </Link>
+
             <h1 className={styles.title}>{gallery.name || "Galeria"}</h1>
 
             <button aria-label="Mais opções" className={styles.moreButton}>

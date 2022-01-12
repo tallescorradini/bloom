@@ -1,4 +1,5 @@
 import Head from "next/head";
+import Link from "next/link";
 import { Image, Transformation } from "cloudinary-react";
 import { useEffect, useState } from "react";
 
@@ -41,55 +42,59 @@ export default function Home() {
         <ul className={styles.galleryList}>
           {galleries.map((gallery) => (
             <li key={gallery.id}>
-              <a href={`/${gallery.id}`}>
-                <section className={styles.gallery}>
-                  <header>
-                    <h2 className={styles.title}>{gallery.name}</h2>
-                    <h3 className={styles.createdAtDate}>
-                      {formatCreatedAt(gallery.createdAt)}
-                    </h3>
-                    <span className={styles.accessLink} aria-hidden="true">
-                      <span
-                        aria-hidden="true"
-                        className="icon xs chevronRight"
-                      ></span>
-                      Ver
-                    </span>
-                  </header>
+              <Link href={`/${gallery.id}`}>
+                <a>
+                  <section className={styles.gallery}>
+                    <header>
+                      <h2 className={styles.title}>{gallery.name}</h2>
+                      <h3 className={styles.createdAtDate}>
+                        {formatCreatedAt(gallery.createdAt)}
+                      </h3>
+                      <span className={styles.accessLink} aria-hidden="true">
+                        <span
+                          aria-hidden="true"
+                          className="icon xs chevronRight"
+                        ></span>
+                        Ver
+                      </span>
+                    </header>
 
-                  <ul className={styles.thumbnailList}>
-                    {gallery.images.map((image) => (
-                      <li key={image.id}>
-                        <Image
-                          cloudName={process.env.NEXT_PUBLIC_CLOUD_NAME}
-                          publicId={image.src.cloudinary.publicId}
-                          version={image.src.cloudinary.version}
-                          loading="lazy"
-                        >
-                          <Transformation
-                            gravity="auto"
-                            height="150"
-                            width="150"
-                            crop="fill"
-                          />
-                        </Image>
-                      </li>
-                    ))}
-                    {Array.from(
-                      Array(MAX_GALLERY_THUMBNAILS - gallery.images.length)
-                    ).map((v, i) => (
-                      <li key={i}></li>
-                    ))}
-                  </ul>
-                </section>
-              </a>
+                    <ul className={styles.thumbnailList}>
+                      {gallery.images.map((image) => (
+                        <li key={image.id}>
+                          <Image
+                            cloudName={process.env.NEXT_PUBLIC_CLOUD_NAME}
+                            publicId={image.src.cloudinary.publicId}
+                            version={image.src.cloudinary.version}
+                            loading="lazy"
+                          >
+                            <Transformation
+                              gravity="auto"
+                              height="150"
+                              width="150"
+                              crop="fill"
+                            />
+                          </Image>
+                        </li>
+                      ))}
+                      {Array.from(
+                        Array(MAX_GALLERY_THUMBNAILS - gallery.images.length)
+                      ).map((v, i) => (
+                        <li key={i}></li>
+                      ))}
+                    </ul>
+                  </section>
+                </a>
+              </Link>
             </li>
           ))}
         </ul>
 
-        <a href="#" aria-label="Criar nova galeria" className={styles.fab}>
-          <span aria-hidden="true" className="icon xl add"></span>
-        </a>
+        <Link href="#">
+          <a aria-label="Criar nova galeria" className={styles.fab}>
+            <span aria-hidden="true" className="icon xl add"></span>
+          </a>
+        </Link>
       </main>
     </div>
   );
