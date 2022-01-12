@@ -4,12 +4,16 @@ import {
   updateDoc,
   serverTimestamp,
   getDoc,
+  setDoc,
+  query,
+  where,
+  getDocs,
 } from "firebase/firestore";
 
-import { firebaseDatabase } from "./firebaseApp";
+import { firebaseDatabase as db } from "./firebaseApp";
 
 export function makeImageId() {
-  const imageRef = doc(collection(firebaseDatabase, "gallery"));
+  const imageRef = doc(collection(db, "images"));
 
   return imageRef.id;
 }
@@ -17,24 +21,24 @@ export function makeImageId() {
 export async function saveImage(imageData) {
   const { id, src, galleryId } = imageData;
 
-  const galleryRef = doc(firebaseDatabase, "gallery", galleryId);
-  const createdAt = serverTimestamp();
-  const imageField = {
-    [id]: {
-      src,
-      createdAt,
-      galleryId,
-    },
-  };
+  await setDoc(doc(db, "images", id), {
+    src,
+    galleryId,
+    createdAt: Date(),
+  });
 
-  await updateDoc(galleryRef, imageField);
-
-  // serverTimestamp does not return a date string, but an instance to be run on the server
   return { ...imageData, createdAt: Date() };
 }
 
 export async function getGallery(galleryId) {
-  const docRef = doc(firebaseDatabase, "gallery", galleryId);
-  const docSnap = await getDoc(docRef);
-  if (docSnap.exists()) return docSnap.data();
+  const gallery = await getDoc(doc(db, "galleries", galleryId));
+  if (!gallery.exists()) return null;
+
+  const images = (
+    await getDocs(
+      query(collection(db, "images"), where("galleryId", "==", galleryId))
+    )
+  ).docs.map((image) => ({ id: image.id, ...image.data() }));
+
+  return { ...gallery.data(), images };
 }
