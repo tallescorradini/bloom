@@ -1,13 +1,17 @@
 .fab {
-  --container-size: 5rem;
-
   position: fixed;
-  right: 1rem;
-  bottom: 1rem;
 
-  width: var(--container-size);
-  height: var(--container-size);
-  border-style: none;
-  border-radius: 50%;
-  background-color: #9b2990;
+  text-align: center;
+
+  button {
+    --container-size: 5rem;
+
+    width: var(--container-size);
+    height: var(--container-size);
+    box-shadow: 0px 4px 4px hsla(0, 0%, 0%, 50%);
+
+    border-style: none;
+    border-radius: 50%;
+    background-color: #9b2990;
+  }
 }

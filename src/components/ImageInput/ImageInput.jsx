@@ -2,11 +2,11 @@ import { useRef } from "react";
 
 import styles from "./ImageInput.module.scss";
 
-export function ImageInput({ onImageChange }) {
+export function ImageInput({ onImageChange, id }) {
   const imageInputRef = useRef();
 
   return (
-    <>
+    <div id={id} className={styles.fab}>
       <input
         type="file"
         style={{ display: "none" }}
@@ -19,10 +19,9 @@ export function ImageInput({ onImageChange }) {
           imageInputRef.current.click();
         }}
         aria-label="Nova foto"
-        className={styles.fab}
       >
         <span aria-hidden="true" className="icon xl cameraFilled"></span>
       </button>
-    </>
+    </div>
   );
 }
