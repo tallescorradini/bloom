@@ -12,7 +12,11 @@ export function RadioField({
   const stringfiedValue = value.toString();
   const stringfiedSelectedValue = selectedValue.toString();
   return (
-    <div className={`${styles.radioField} ${className}`}>
+    <div
+      className={`${styles.radioField || ""}${
+        className ? " " + className : ""
+      }`}
+    >
       <input
         onChange={onChange}
         checked={stringfiedValue === stringfiedSelectedValue}

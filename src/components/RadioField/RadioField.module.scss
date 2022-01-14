@@ -1,0 +1,12 @@
+.radioField {
+  display: flex;
+  align-items: center;
+
+  input {
+    margin: 0;
+  }
+
+  input:checked ~ label {
+    font-weight: 600;
+  }
+}

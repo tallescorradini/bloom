@@ -90,7 +90,7 @@ export default function Home() {
           ))}
         </ul>
 
-        <Link href="#">
+        <Link href={`/add-gallery?totalGalleries=${galleries.length}`}>
           <a aria-label="Criar nova galeria" className={styles.fab}>
             <span aria-hidden="true" className="icon xl add"></span>
           </a>

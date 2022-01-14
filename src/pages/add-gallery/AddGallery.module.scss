@@ -1,0 +1,107 @@
+.title {
+  margin: 0;
+
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
+.backLink {
+  --container-size: 2.5rem;
+
+  margin: 0;
+  height: var(--container-size);
+  width: var(--container-size);
+
+  display: flex;
+  justify-content: flex-start;
+
+  span {
+    margin: auto 0;
+
+    background-color: #707070;
+  }
+}
+
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: 3rem;
+}
+
+.form {
+  width: 100%;
+
+  display: flex;
+  flex-direction: column;
+  gap: 2.5rem;
+
+  fieldset {
+    margin: 0;
+    border-style: none;
+
+    padding: 0;
+
+    legend {
+      padding: 0;
+      margin-bottom: 1rem;
+    }
+
+    .radioField {
+      padding: 1rem;
+      padding-left: 0;
+
+      input {
+        margin-right: 1rem;
+      }
+
+      label {
+        font-size: 1.25rem;
+      }
+    }
+  }
+}
+
+.buttonPrimary {
+  width: 100%;
+  height: 4rem;
+  border-style: none;
+  border-radius: 0.5rem;
+  background-color: #9b2990;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.75rem;
+
+  color: #fff;
+  font-size: 1.25rem;
+  font-family: inherit;
+  text-transform: uppercase;
+
+  span {
+    margin: auto 0;
+    background-color: #fff;
+  }
+}
+
+.buttonSecondary {
+  width: 100%;
+  border-style: none;
+  border-radius: 0.5rem;
+  background-color: #fff;
+
+  line-height: 4rem;
+  color: #9b2990;
+  font-weight: 500;
+  font-size: 1.25rem;
+  text-transform: uppercase;
+  text-align: center;
+}
+
+.buttonGroup {
+  margin-top: 2rem;
+
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}

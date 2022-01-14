@@ -43,4 +43,17 @@
     background: url("../public/icon-add.svg") no-repeat center;
     background-size: contain;
   }
+  &.close {
+    mask: url("../public/icon-add.svg") no-repeat center;
+    background-size: contain;
+    transform: rotate(45deg);
+  }
+  &.qrcode {
+    mask: url("../public/icon-qr.svg") no-repeat center;
+    mask-size: contain;
+  }
+  &.cutHere {
+    background: url("../public/icon-cut-here.svg") no-repeat center;
+    background-size: contain;
+  }
 }

@@ -8,6 +8,7 @@ import {
   getDocs,
   limit,
   orderBy,
+  addDoc,
 } from "firebase/firestore";
 
 import { firebaseDatabase as db } from "./firebaseApp";
@@ -53,7 +54,11 @@ export async function getUserGalleries({ userId, maxThumbnails }) {
   const galleries = await Promise.all(
     (
       await getDocs(
-        query(collection(db, "galleries"), where("userId", "==", userId))
+        query(
+          collection(db, "galleries"),
+          where("userId", "==", userId),
+          orderBy("createdAt", "asc")
+        )
       )
     ).docs.map(async (gallery) => {
       const images = (
@@ -72,4 +77,15 @@ export async function getUserGalleries({ userId, maxThumbnails }) {
   );
 
   return galleries;
+}
+
+export async function createGallery({ galleryName, userId }) {
+  const createdAt = Date.now();
+  const galleryData = {
+    name: galleryName,
+    userId,
+    createdAt,
+  };
+  const galleryRef = await addDoc(collection(db, "galleries"), galleryData);
+  return { id: galleryRef.id, ...galleryData };
 }
