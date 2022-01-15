@@ -1,0 +1,49 @@
+.headerWithCloseButton {
+  display: flex;
+  justify-content: space-between;
+
+  .title {
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: var(--color-primary);
+  }
+
+  button {
+    border-style: none;
+    background-color: transparent;
+
+    & > :global(.icon) {
+      background-color: var(--background-color-primary);
+    }
+  }
+
+  button.return {
+    display: none;
+  }
+}
+
+.headerWithReturnButton {
+  position: relative;
+
+  .title {
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: var(--color-primary);
+    text-align: center;
+  }
+
+  button {
+    position: absolute;
+
+    border-style: none;
+    background-color: transparent;
+
+    & > :global(.icon) {
+      background-color: var(--background-color-primary);
+    }
+  }
+
+  button.close {
+    display: none;
+  }
+}

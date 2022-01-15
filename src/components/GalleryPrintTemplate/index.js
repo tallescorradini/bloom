@@ -8,12 +8,19 @@ import { QRCodeCanvas } from "./QRCodeCanvas";
 const QR_CODE_SIZES = [50 + 8, 75 + 8, 100 + 8];
 
 export const GalleryPrintTemplate = React.forwardRef(
-  ({ printGalleries = [] }, ref) => {
+  ({ printGalleries = [], copy = false }, ref) => {
+    const isPlural = printGalleries.length > 1;
     return (
       <div style={{ display: "none" }}>
         <div ref={ref} className={styles.page}>
           <h1 className={styles.title}>
-            Novas galerias disponíves para suas flores!
+            {copy
+              ? isPlural
+                ? "Novas cópias de etiqueta disponíveis!"
+                : "Nova cópia de etiqueta disponível!"
+              : isPlural
+              ? "Novas galerias disponíves para suas flores!"
+              : "Nova galeria disponível para sua flor!"}
           </h1>
 
           <div className={styles.instructions}>

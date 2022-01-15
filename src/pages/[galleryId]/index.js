@@ -6,14 +6,21 @@ import axios from "axios";
 import { Image, Transformation } from "cloudinary-react";
 
 import styles from "./Gallery.module.scss";
-import { ImageInput } from "../../components/ImageInput/ImageInput";
-import { database } from "../../services";
 import { encodeImage } from "../../utils/encodeImage";
+import { database } from "../../services";
+import { AppBarBottom } from "../../components/AppBarBottom/AppBarBottom";
+import { EditGalleryDrawer } from "./components/EditGalleryDrawer/EditGalleryDrawer";
+import {
+  deleteGallery,
+  updateGallery,
+} from "../../services/firebase/firebaseDb";
+import { PrintQrDrawer } from "./components/PrintQrDrawer/PrintQrDrawer";
 
 export default function Gallery() {
   const router = useRouter();
   const [gallery, setGallery] = useState({});
   const [galleryNotFound, setGalleryNotFound] = useState(false);
+  const [openDrawer, setOpenDrawer] = useState("");
   const { galleryId } = router.query;
 
   async function uploadImage(imageId, imageFile, galleryId) {
@@ -34,7 +41,7 @@ export default function Gallery() {
     return savedImageData;
   }
 
-  const handleImageChange = async (event) => {
+  const handleAddImage = async (event) => {
     const imageFile = event.target.files[0];
     if (!imageFile) return;
     const imageId = database.makeImageId();
@@ -52,9 +59,39 @@ export default function Gallery() {
     }
   };
 
+  async function handleGalleryNameChange(newName) {
+    const updatedGallery = { ...gallery, name: newName };
+    await updateGallery({ galleryId, data: updatedGallery });
+    setGallery(updatedGallery);
+  }
+
+  async function handleDeleteGallery() {
+    if (gallery.images.length > 100)
+      return alert(
+        "Não foi possível deletar galeria. Entre em contato com suporte."
+      );
+    await axios.delete(`/api/${galleryId}`);
+    await deleteGallery({ galleryId, galleryImages: gallery.images });
+    router.replace("/");
+  }
+
+  // UI
+
   const galleryHasImages = () => {
     return gallery.images?.length > 0;
   };
+
+  function handleEditGalleryClick() {
+    setOpenDrawer("EDIT_GALLERY");
+  }
+
+  function handlePrintQrClick() {
+    setOpenDrawer("PRINT_QR");
+  }
+
+  function handleCloseDrawerClick() {
+    setOpenDrawer("");
+  }
 
   useEffect(() => {
     if (!galleryId) return;
@@ -87,10 +124,6 @@ export default function Gallery() {
             </Link>
 
             <h1 className={styles.title}>{gallery.name || "Galeria"}</h1>
-
-            <button aria-label="Mais opções" className={styles.moreButton}>
-              <span aria-hidden="true" className="icon sm moreVertical"></span>
-            </button>
           </header>
 
           <main>
@@ -119,7 +152,23 @@ export default function Gallery() {
             )}
           </main>
 
-          <ImageInput onImageChange={handleImageChange} />
+          <AppBarBottom
+            onPrintQrClick={handlePrintQrClick}
+            onAddImage={handleAddImage}
+            onEditGalleryClick={handleEditGalleryClick}
+          />
+          <EditGalleryDrawer
+            open={openDrawer === "EDIT_GALLERY"}
+            onClose={handleCloseDrawerClick}
+            galleryName={gallery.name}
+            onGalleryNameChange={handleGalleryNameChange}
+            onDeleteGallery={handleDeleteGallery}
+          />
+          <PrintQrDrawer
+            gallery={{ ...gallery, galleryId }}
+            open={openDrawer === "PRINT_QR"}
+            onClose={handleCloseDrawerClick}
+          />
         </div>
       )}
     </>

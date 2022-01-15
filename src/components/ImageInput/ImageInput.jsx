@@ -2,7 +2,7 @@ import { useRef } from "react";
 
 import styles from "./ImageInput.module.scss";
 
-export function ImageInput({ onImageChange, id }) {
+export function ImageInput({ onAddImage, id }) {
   const imageInputRef = useRef();
 
   return (
@@ -10,7 +10,7 @@ export function ImageInput({ onImageChange, id }) {
       <input
         type="file"
         style={{ display: "none" }}
-        onChange={onImageChange}
+        onChange={onAddImage}
         ref={imageInputRef}
         accept="image/x-png,image/jpeg"
       />

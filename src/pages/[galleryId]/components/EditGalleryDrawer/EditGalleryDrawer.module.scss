@@ -1,0 +1,40 @@
+.buttonPrimary {
+  --component-spacing: 1.5rem;
+
+  width: 100%;
+  border-radius: 0.5rem;
+  border-style: none;
+  background-color: var(--background-color-primary-light);
+
+  padding: var(--component-spacing);
+  display: flex;
+  align-items: center;
+  gap: var(--component-spacing);
+
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: var(--color-primary);
+
+  transition: filter 0.2s;
+
+  &:active {
+    filter: brightness(0.9);
+  }
+
+  :global(.icon) {
+    background-color: var(--color-primary);
+  }
+
+  :global(.chevronRight) {
+    margin-left: auto;
+  }
+
+  &.attention {
+    background-color: var(--background-color-primary);
+    color: #fff;
+
+    :global(.icon) {
+      background-color: #fff;
+    }
+  }
+}

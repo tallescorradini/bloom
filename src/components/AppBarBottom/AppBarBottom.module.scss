@@ -1,0 +1,40 @@
+.appBar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+
+  height: 5rem;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+
+  background: #fff;
+
+  .qrButton {
+    border-style: none;
+    background-color: transparent;
+
+    padding: 1rem;
+
+    & > :global(.qrcode) {
+      background-color: #9b2990;
+    }
+  }
+
+  :global(#image-fab) {
+    position: relative;
+    bottom: 1.5rem;
+  }
+
+  .editButton {
+    border-style: none;
+    background-color: transparent;
+
+    padding: 1rem;
+
+    & > :global(.pencil) {
+      background-color: #9b2990;
+    }
+  }
+}

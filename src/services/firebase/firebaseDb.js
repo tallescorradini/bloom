@@ -9,6 +9,8 @@ import {
   limit,
   orderBy,
   addDoc,
+  updateDoc,
+  deleteDoc,
 } from "firebase/firestore";
 
 import { firebaseDatabase as db } from "./firebaseApp";
@@ -88,4 +90,21 @@ export async function createGallery({ galleryName, userId }) {
   };
   const galleryRef = await addDoc(collection(db, "galleries"), galleryData);
   return { id: galleryRef.id, ...galleryData };
+}
+
+export async function updateGallery({ galleryId, data }) {
+  await setDoc(
+    doc(db, "galleries", galleryId),
+    { createdAt: data.createdAt, name: data.name, userId: data.userId },
+    { merge: true }
+  );
+}
+
+export async function deleteGallery({ galleryId, galleryImages }) {
+  await deleteDoc(doc(db, "galleries", galleryId));
+  await Promise.all(
+    galleryImages.map(async (image) => {
+      await deleteDoc(doc(db, "images", image.id));
+    })
+  );
 }
