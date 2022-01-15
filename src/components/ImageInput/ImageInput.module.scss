@@ -1,8 +1,6 @@
 .fab {
   position: fixed;
 
-  text-align: center;
-
   button {
     --container-size: 5rem;
 
@@ -13,5 +11,9 @@
     border-style: none;
     border-radius: 50%;
     background-color: #9b2990;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
 }

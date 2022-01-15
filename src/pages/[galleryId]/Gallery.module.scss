@@ -1,5 +1,12 @@
 .header {
+  position: relative;
+
   .title {
+    position: absolute;
+    left: 0;
+    right: 0;
+
+    text-align: center;
     font-size: 1.5rem;
     font-weight: 400;
   }
