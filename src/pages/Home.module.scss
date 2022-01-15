@@ -105,3 +105,26 @@
   justify-content: center;
   align-items: center;
 }
+
+.emptyGallery {
+  margin-top: 2rem;
+
+  text-align: center;
+  .title {
+    font-size: 1rem;
+    font-weight: 600;
+  }
+
+  p {
+    font-size: 1.25rem;
+
+    margin-top: 3rem;
+  }
+
+  img {
+    position: fixed;
+    left: -20%;
+    bottom: 0;
+    filter: opacity(30%);
+  }
+}
