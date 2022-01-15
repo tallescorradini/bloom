@@ -9,6 +9,8 @@
     text-align: center;
     font-size: 1.5rem;
     font-weight: 400;
+
+    pointer-events: none;
   }
 }
 
@@ -19,6 +21,12 @@
   height: var(--container-size);
   width: var(--container-size);
   display: flex;
+  justify-content: flex-start;
+  align-items: center;
+
+  :global(.icon) {
+    background-color: var(--color-primary);
+  }
 }
 
 .moreButton {

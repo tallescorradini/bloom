@@ -3,7 +3,7 @@
 
   height: var(--icon-size);
   width: var(--icon-size);
-  display: block;
+  display: inline-block;
 
   &.xs {
     --icon-size: 0.75rem;

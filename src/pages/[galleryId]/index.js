@@ -118,7 +118,7 @@ export default function Gallery() {
 
           <header className={styles.header}>
             <Link href="/">
-              <a href="/" aria-label="Voltar" className={styles.backLink}>
+              <a aria-label="Voltar" className={styles.backLink}>
                 <span aria-hidden="true" className="icon sm chevronLeft"></span>
               </a>
             </Link>
