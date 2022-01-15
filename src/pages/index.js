@@ -22,6 +22,8 @@ export default function Home() {
     return `desde ${formattedDate}`;
   }
 
+  const isEmpty = galleries.length === 0;
+
   useEffect(() => {
     getUserGalleries({ userId, maxThumbnails: MAX_GALLERY_THUMBNAILS }).then(
       (galleries) => setGalleries(galleries)
