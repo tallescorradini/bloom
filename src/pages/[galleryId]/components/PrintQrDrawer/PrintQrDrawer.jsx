@@ -32,7 +32,10 @@ export function PrintQrDrawer({ gallery, open, onClose }) {
           {
             id: gallery.id,
             name: gallery.name,
-            url: `${process.env.NEXT_PUBLIC_APP_URL}/${gallery.id}`,
+            url: `${
+              process.env.NEXT_PUBLIC_VERCEL_URL ||
+              process.env.NEXT_PUBLIC_APP_URL
+            }/${gallery.id}`,
           },
         ]}
         copy={true}

@@ -14,9 +14,8 @@ import { RadioField } from "../../components/RadioField";
 const userId = process.env.NEXT_PUBLIC_USER_ID_PLACEHOLDER;
 
 export default function AddGallery() {
-  const {
-    query: { totalGalleries },
-  } = useRouter();
+  const router = useRouter();
+  const { totalGalleries } = router.query;
   const [labelQuantity, setLabelQuanity] = useState(4);
   const [currentStep, setCurrentStep] = useState(0);
   const [printGalleries, setPrintGalleries] = useState([]);
@@ -45,7 +44,10 @@ export default function AddGallery() {
           {
             id: gallery.id,
             name: galleryName,
-            url: `${process.env.NEXT_PUBLIC_APP_URL}/${gallery.id}`,
+            url: `${
+              process.env.NEXT_PUBLIC_VERCEL_URL ||
+              process.env.NEXT_PUBLIC_APP_URL
+            }/${gallery.id}`,
           },
         ]);
       })
