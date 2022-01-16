@@ -44,16 +44,17 @@ export default function Gallery() {
   const handleAddImage = async (event) => {
     const imageFile = event.target.files[0];
     if (!imageFile) return;
+
     const imageId = database.makeImageId();
+    const temporarySrc = URL.createObjectURL(imageFile);
+
+    setGallery((prev) => ({
+      ...prev,
+      images: [...prev.images, { src: temporarySrc, id: imageId }],
+    }));
+
     try {
-      const savedImageData = await uploadImage(imageId, imageFile, galleryId);
-      setGallery((prev) => ({
-        ...prev,
-        images: [
-          ...prev.images,
-          { src: savedImageData.src, id: savedImageData.id },
-        ],
-      }));
+      uploadImage(imageId, imageFile, galleryId);
     } catch (error) {
       console.log(error);
     }
@@ -131,19 +132,29 @@ export default function Gallery() {
               <ul className={styles.imageList}>
                 {gallery.images.map((image) => (
                   <li key={image.id}>
-                    <Image
-                      cloudName={process.env.NEXT_PUBLIC_CLOUD_NAME}
-                      publicId={image.src.cloudinary.publicId}
-                      version={image.src.cloudinary.version}
-                      loading="lazy"
-                    >
-                      <Transformation
-                        gravity="auto"
+                    {image.src.cloudinary?.publicId ? (
+                      <Image
+                        cloudName={process.env.NEXT_PUBLIC_CLOUD_NAME}
+                        publicId={image.src.cloudinary.publicId}
+                        version={image.src.cloudinary.version}
+                        loading="lazy"
+                      >
+                        <Transformation
+                          gravity="auto"
+                          height="150"
+                          width="150"
+                          crop="fill"
+                        />
+                      </Image>
+                    ) : (
+                      <img
+                        src={image.src}
+                        alt="Descrição não disponível"
                         height="150"
                         width="150"
-                        crop="fill"
+                        style={{ objectFit: "cover" }}
                       />
-                    </Image>
+                    )}
                   </li>
                 ))}
               </ul>
