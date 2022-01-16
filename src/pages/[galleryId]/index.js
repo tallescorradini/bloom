@@ -132,29 +132,33 @@ export default function Gallery() {
               <ul className={styles.imageList}>
                 {gallery.images.map((image) => (
                   <li key={image.id}>
-                    {image.src.cloudinary?.publicId ? (
-                      <Image
-                        cloudName={process.env.NEXT_PUBLIC_CLOUD_NAME}
-                        publicId={image.src.cloudinary.publicId}
-                        version={image.src.cloudinary.version}
-                        loading="lazy"
-                      >
-                        <Transformation
-                          gravity="auto"
-                          height="150"
-                          width="150"
-                          crop="fill"
-                        />
-                      </Image>
-                    ) : (
-                      <img
-                        src={image.src}
-                        alt="Descrição não disponível"
-                        height="150"
-                        width="150"
-                        style={{ objectFit: "cover" }}
-                      />
-                    )}
+                    <Link href={`/${galleryId}/${image.id}`}>
+                      <a aria-label="Visualizar imagem">
+                        {image.src.cloudinary?.publicId ? (
+                          <Image
+                            cloudName={process.env.NEXT_PUBLIC_CLOUD_NAME}
+                            publicId={image.src.cloudinary.publicId}
+                            version={image.src.cloudinary.version}
+                            loading="lazy"
+                          >
+                            <Transformation
+                              gravity="auto"
+                              height="150"
+                              width="150"
+                              crop="fill"
+                            />
+                          </Image>
+                        ) : (
+                          <img
+                            src={image.src}
+                            alt="Descrição não disponível"
+                            height="150"
+                            width="150"
+                            style={{ objectFit: "cover" }}
+                          />
+                        )}
+                      </a>
+                    </Link>
                   </li>
                 ))}
               </ul>

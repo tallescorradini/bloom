@@ -11,6 +11,7 @@ import {
   addDoc,
   updateDoc,
   deleteDoc,
+  documentId,
 } from "firebase/firestore";
 
 import { firebaseDatabase as db } from "./firebaseApp";
@@ -107,4 +108,11 @@ export async function deleteGallery({ galleryId, galleryImages }) {
       await deleteDoc(doc(db, "images", image.id));
     })
   );
+}
+
+export async function getGalleryImage(imageId) {
+  const image = await getDoc(doc(db, "images", imageId));
+  if (!image.exists()) return null;
+
+  return image.data();
 }

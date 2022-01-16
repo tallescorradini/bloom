@@ -1,0 +1,22 @@
+.page {
+  header {
+    display: grid;
+    grid-template-areas: "backLink title .";
+    grid-template-areas: repeat(3, 1fr);
+
+    .backLink {
+      grid-area: backLink;
+      :global(.icon) {
+        background-color: var(--color-primary);
+      }
+    }
+
+    .title {
+      grid-area: title;
+    }
+  }
+
+  main {
+    padding: 0;
+  }
+}
