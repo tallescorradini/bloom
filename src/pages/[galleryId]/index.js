@@ -109,7 +109,7 @@ export default function Gallery() {
       ) : (
         <div className="pageWithFixedHeader">
           <Head>
-            <title>{"QR-Drive"}</title>
+            <title>{gallery.name}</title>
             <meta
               name="description"
               content={"Easily access your media using QR Codes"}
