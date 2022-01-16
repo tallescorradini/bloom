@@ -2,9 +2,9 @@ import { useRef } from "react";
 import { useReactToPrint } from "react-to-print";
 
 import styles from "./PrintQrDrawer.module.scss";
-import { DrawerBottom } from "../../../../components/DrawerBottom/DrawerBottom";
-import { Header } from "../../../../components/Header/Header";
-import { GalleryPrintTemplate } from "../../../../components/GalleryPrintTemplate";
+import { DrawerBottom } from "../DrawerBottom/DrawerBottom";
+import { Header } from "../Header/Header";
+import { GalleryPrintTemplate } from "../GalleryPrintTemplate";
 
 export function PrintQrDrawer({ gallery, open, onClose }) {
   if (!open) return null;

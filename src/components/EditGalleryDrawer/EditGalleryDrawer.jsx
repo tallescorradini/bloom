@@ -1,6 +1,6 @@
 import { useState } from "react";
-import { DrawerBottom } from "../../../../components/DrawerBottom/DrawerBottom";
-import { Header } from "../../../../components/Header/Header";
+import { DrawerBottom } from "../DrawerBottom/DrawerBottom";
+import { Header } from "../Header/Header";
 import { DeleteGallery } from "../DeleteGallery/DeleteGallery";
 import { EditGalleryName } from "../EditGalleryName/EditGalleryName";
 import styles from "./EditGalleryDrawer.module.scss";

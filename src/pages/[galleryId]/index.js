@@ -9,12 +9,12 @@ import styles from "./Gallery.module.scss";
 import { encodeImage } from "../../utils/encodeImage";
 import { database } from "../../services";
 import { AppBarBottom } from "../../components/AppBarBottom/AppBarBottom";
-import { EditGalleryDrawer } from "./components/EditGalleryDrawer/EditGalleryDrawer";
+import { EditGalleryDrawer } from "../../components/EditGalleryDrawer/EditGalleryDrawer";
 import {
   deleteGallery,
   updateGallery,
 } from "../../services/firebase/firebaseDb";
-import { PrintQrDrawer } from "./components/PrintQrDrawer/PrintQrDrawer";
+import { PrintQrDrawer } from "../../components/PrintQrDrawer/PrintQrDrawer";
 
 export default function Gallery() {
   const router = useRouter();
