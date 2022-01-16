@@ -1,5 +1,3 @@
-import util from "util";
-
 import cloudinary from "../../../services/cloudinary";
 
 export default async function handler(req, res) {
@@ -8,21 +6,14 @@ export default async function handler(req, res) {
   switch (req.method) {
     case "DELETE": {
       try {
-        const deleteFolderImages = util.promisify(
-          cloudinary.api.delete_resources_by_prefix
-        );
-        await deleteFolderImages(galleryId);
-      } catch (e) {
-        return res.status(400).json({ error: e.message });
+        await cloudinary.api.delete_resources_by_prefix(galleryId);
+        await cloudinary.api.delete_folder(galleryId);
+      } catch (err) {
+        if (err.error?.http_code === 404)
+          return res.status(200).json({ result: "ok" });
+        return res.status(400).json({ error: err.message });
       }
-      try {
-        const deleteFolder = util.promisify(cloudinary.api.delete_folder);
-        await deleteFolder(galleryId);
-      } catch (e) {
-        if (e.http_code === 404) return res.status(200).json("ok");
-        return res.status(400).json({ error: e.message });
-      }
-      return res.status(200).json("ok");
+      return res.status(200).json({ result: "ok" });
     }
 
     default:
