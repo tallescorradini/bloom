@@ -44,10 +44,7 @@ export default function AddGallery() {
           {
             id: gallery.id,
             name: galleryName,
-            url: `${
-              process.env.NEXT_PUBLIC_VERCEL_URL ||
-              process.env.NEXT_PUBLIC_APP_URL
-            }/${gallery.id}`,
+            url: `${process.env.NEXT_PUBLIC_APP_URL}/${gallery.id}`,
           },
         ]);
       })
