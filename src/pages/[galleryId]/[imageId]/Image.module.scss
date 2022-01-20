@@ -1,5 +1,5 @@
 .page {
-  header {
+  & > header {
     display: grid;
     grid-template-areas: "backLink title .";
     grid-template-areas: repeat(3, 1fr);
@@ -13,6 +13,17 @@
 
     .title {
       grid-area: title;
+    }
+
+    .deleteButton {
+      margin: -1rem;
+
+      padding: 1rem;
+      border-style: none;
+      background-color: transparent;
+
+      font-size: 1rem;
+      color: #ac0000;
     }
   }
 

@@ -5,13 +5,21 @@ import { useEffect, useState } from "react";
 import { Image, Placeholder } from "cloudinary-react";
 
 import styles from "./Image.module.scss";
-import { getGalleryImage } from "../../../services/firebase/firebaseDb";
+import {
+  deleteImage,
+  getGalleryImage,
+} from "../../../services/firebase/firebaseDb";
+import { DrawerBottom } from "../../../components/DrawerBottom/DrawerBottom";
+import { Header } from "../../../components/Header/Header";
+import { DeleteImage } from "../../../components/DeleteImage.jsx/DeleteImage";
+import axios from "axios";
 
 export default function GalleryImage() {
   const router = useRouter();
   const { galleryId, imageId } = router.query;
   const [image, setImage] = useState();
   const [loading, setLoading] = useState(true);
+  const [openDrawer, setOpenDrawer] = useState(false);
 
   function formatCreatedAt(milisecondsElapsed) {
     const date = new Date(milisecondsElapsed);
@@ -21,6 +29,16 @@ export default function GalleryImage() {
     const formattedDate = intlDate.replace(".", "");
 
     return formattedDate;
+  }
+
+  function handleCloseDrawer() {
+    setOpenDrawer(false);
+  }
+
+  async function handleDeleteImage() {
+    await axios.delete(`/api/${galleryId}/${imageId}`);
+    await deleteImage(imageId);
+    router.replace(`/${galleryId}`);
   }
 
   useEffect(() => {
@@ -51,6 +69,12 @@ export default function GalleryImage() {
         <h2 className={styles.title}>
           {image ? formatCreatedAt(image.createdAt) : ""}
         </h2>
+        <button
+          onClick={() => setOpenDrawer(true)}
+          className={styles.deleteButton}
+        >
+          Excluir
+        </button>
       </header>
 
       <main>
@@ -66,6 +90,13 @@ export default function GalleryImage() {
             <Placeholder type="blur" />
           </Image>
         )}
+
+        {openDrawer ? (
+          <DrawerBottom onClose={handleCloseDrawer}>
+            <Header title={"Excluir imagem"} onClose={handleCloseDrawer} />
+            <DeleteImage onDeleteImage={handleDeleteImage} />
+          </DrawerBottom>
+        ) : null}
       </main>
     </div>
   );

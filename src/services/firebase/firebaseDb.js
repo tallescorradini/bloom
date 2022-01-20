@@ -116,3 +116,7 @@ export async function getGalleryImage(imageId) {
 
   return image.data();
 }
+
+export async function deleteImage(imageId) {
+  await deleteDoc(doc(db, "images", imageId));
+}
